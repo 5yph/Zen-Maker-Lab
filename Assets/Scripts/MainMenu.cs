@@ -14,12 +14,9 @@ public class MainMenu : MonoBehaviour
     /* Quit functionality is irrelevant for WebGL (cannot quit browser-based games)
     However, it is included here in case you want to publish to other platforms
 
-    */
     public void QuitGame()
     {
         Application.Quit();
-        UnityEditor.EditorApplication.isPlaying = false;
-    }
-
-    //
+        UnityEditor.EditorApplication.isPlaying = false; // Optional, quits game preview in editor
+    } */
 }
