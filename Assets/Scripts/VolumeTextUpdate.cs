@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class VolumeTextUpdate : MonoBehaviour
 {
-    public TextMeshProUGUI volText; // new text object
+    public TextMeshProUGUI volText; // create new text object
 
     // Start is called before the first frame update
     void Start()
     {
-        volText = this.GetComponent<TextMeshProUGUI>(); // set volText the TMP component
+        volText = this.GetComponent<TextMeshProUGUI>(); // set volText to the TMP component
     }
 
     public void UpdateText(float value) // 'value' is automatically passed from slider object
