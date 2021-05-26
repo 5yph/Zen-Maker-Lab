@@ -15,7 +15,7 @@ public class VolumeTextUpdate : MonoBehaviour
 
     public void UpdateText(float value) // 'value' is automatically passed from slider object
     {
-        volText.text = "Volume: " + value + "%"; // change volume text
+        volText.text = "Volume: " + Mathf.Round(value) + "%"; // change volume text
     }
 
 }
