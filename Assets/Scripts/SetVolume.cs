@@ -9,10 +9,11 @@ public class SetVolume : MonoBehaviour
     public AudioMixer music;
     public Slider volSlider;
 
-    /* void Start()
+     void Start()
     {
-        
-    } */
+        music.SetFloat("MusicVol", Mathf.Log10(0.3f) * 20);
+        // set default volume to 30%
+    } 
 
     public void SetVol(float value)
     {
