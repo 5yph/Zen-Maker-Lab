@@ -14,9 +14,7 @@ public class VolumeTextUpdateTemplate : MonoBehaviour
         Find a method to automatically instantiate our volText object at runtime.
 
         Hints: 
-        - 'this' keyword always references our current game object. If we attached this script
-        to the volume text game object, it would refer to that volume text object.
-        - 'GetComponent<COMPONENT>()' is a method of every game object, include 'this'.
+        - 'GetComponent<COMPONENT>()' is a method of every game object.
         - 'GetComponent<COMPONENT>()' returns COMPONENT, we can return our TextMeshProUGUI component
         */
     }
