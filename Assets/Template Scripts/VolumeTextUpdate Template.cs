@@ -28,6 +28,7 @@ public class VolumeTextUpdateTemplate : MonoBehaviour
         /* We could just pass 'value' into that string to print out our text, but value represents
         a very long float (decimal) number, which we don't like. Try using Round() from the Mathf 
         class to combat this.
+        Don't forget to convert the decimal value to a percentage before rounding.
         */
 
     }
