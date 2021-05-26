@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement; // Important library for scene loading
 
-public class Main : MonoBehaviour
+public class MainMenuTemplate : MonoBehaviour
 {
     public void StartGame()
     {
