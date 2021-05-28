@@ -13,7 +13,6 @@ public class PlayerMovement1Template : MonoBehaviour
     [SerializeField] private float jumpspeed;
 
     private Vector2 direction; // movement direction
-    private bool can_double_jump = false;
     private bool try_jump = false; // is the player trying to jump?
 
     // Start is called before the first frame update
