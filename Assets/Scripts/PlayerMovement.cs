@@ -32,8 +32,6 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         hitbox = GetComponent<CapsuleCollider2D>();
         // get reference to components, allows us to use built-in functions
-
-        Debug.Log("Got Component");
     }
 
     void Update()
