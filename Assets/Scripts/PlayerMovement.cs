@@ -21,8 +21,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float grounded_radius = 0.25f; // how big should our ground check circle be
 
     private Vector2 direction; // movement direction
-    private RaycastHit2D below_char; // represents what object is below us (if any)
-    private bool can_double_jump = false;
+    private int jump_count = 2; // how many times can we jump
     private bool grounded = false; // is the character touching ground?
     private bool try_jump = false; // is the player trying to jump?
     private bool jump_cancelled = false; // did player cancel jump?
@@ -36,23 +35,33 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {   // detect input in Update() so we don't miss any inputs
-        
+
         float x_component = Input.GetAxisRaw("Horizontal");
         float y_component = Input.GetAxisRaw("Vertical");
 
         direction = new Vector2(x_component * movespeed, rb.velocity.y);
-        grounded = isGrounded();
+        grounded = IsGrounded();
 
-        if (Input.GetButtonDown("Jump") && grounded) {
-            // if we press the jump button, remember that the player wants to jump
-            // we need to save this as a variable so it gets processed in FixedUpdate()
-            try_jump = true;
-            can_double_jump = true;
-        } else if (Input.GetButtonDown("Jump") && can_double_jump) {
-            // Player in air, but can still double jump 
-            try_jump = true; 
-            can_double_jump = false;
-        } 
+        if (grounded) {
+            jump_count = 2;
+        }
+
+        if (Input.GetButtonDown("Jump")) {   
+            // user presses jump
+            if (grounded) {
+                try_jump = true;
+                jump_count--;
+            } else if (!grounded && (jump_count == 2)) {
+                // we are in the air, but we still have 2 jumps
+                // i.e. we fell off a cliff
+                try_jump = true;
+                jump_count = 0; // only jump once
+            } else if (jump_count > 0) {
+                // Player in air, but can still jump 
+                try_jump = true;
+                jump_count--;
+            }
+        }
         
         if (Input.GetButtonUp("Jump") && !grounded) {
             // if the player cancelled the jump in mid-air, don't jump as high
@@ -73,10 +82,9 @@ public class PlayerMovement : MonoBehaviour
             }
             jump_cancelled = false;
         }               
-
     } 
 
-    private bool isGrounded()
+    private bool IsGrounded()
     {
         return Physics2D.OverlapCircle((Vector2)transform.position + grounded_offset, grounded_radius, groundLayer);
     }
