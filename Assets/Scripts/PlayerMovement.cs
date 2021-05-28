@@ -9,21 +9,31 @@ public class PlayerMovement : MonoBehaviour
     private CapsuleCollider2D hitbox;
     public LayerMask groundLayer;
     
+    [Header("Speeds")]
     [SerializeField] private float movespeed;
     [SerializeField] private float jumpspeed;
+    [SerializeField] private float short_jumpspeed; // jump speed if jump button only tapped
+
+    [Space]
+
+    [Header("Ground Check")]
     [SerializeField] private Vector2 grounded_offset; // where should our circle detecting ground be located?
+    [SerializeField] private float grounded_radius = 0.25f; // how big should our ground check circle be
 
     private Vector2 direction; // movement direction
     private RaycastHit2D below_char; // represents what object is below us (if any)
     private bool can_double_jump = false;
     private bool grounded = false; // is the character touching ground?
     private bool try_jump = false; // is the player trying to jump?
+    private bool jump_cancelled = false; // did player cancel jump?
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         hitbox = GetComponent<CapsuleCollider2D>();
         // get reference to components, allows us to use built-in functions
+
+        Debug.Log("Got Component");
     }
 
     void Update()
@@ -44,21 +54,33 @@ public class PlayerMovement : MonoBehaviour
             // Player in air, but can still double jump 
             try_jump = true; 
             can_double_jump = false;
+        } 
+        
+        if (Input.GetButtonUp("Jump") && !grounded) {
+            // if the player cancelled the jump in mid-air, don't jump as high
+            jump_cancelled = true;
         }
     }
     private void FixedUpdate()
     {
         Move(direction);
-        if (try_jump)
-        {
+        if (try_jump) {
             Jump();
         }
+        
+        if (jump_cancelled) {
+            if (rb.velocity.y > short_jumpspeed) {
+                // change characters velocity to short jump velocity
+                rb.velocity = new Vector2(rb.velocity.x, short_jumpspeed);
+            }
+            jump_cancelled = false;
+        }               
 
     } 
 
     private bool isGrounded()
     {
-        return Physics2D.OverlapCircle((Vector2)transform.position + grounded_offset, 0.25f, groundLayer);
+        return Physics2D.OverlapCircle((Vector2)transform.position + grounded_offset, grounded_radius, groundLayer);
     }
 
     private void Move(Vector2 direction) 
@@ -75,10 +97,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // Draw the circle detecting where ground is
-
+        // Draw the circle that detects where ground is
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere((Vector2)transform.position + grounded_offset, 0.25f);
+        Gizmos.DrawWireSphere((Vector2)transform.position + grounded_offset, grounded_radius);
     }
-
 }
