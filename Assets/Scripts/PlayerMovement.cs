@@ -20,16 +20,33 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Vector2 grounded_offset; // where should our circle detecting ground be located?
     [SerializeField] private float grounded_radius = 0.25f; // how big should our ground check circle be
 
+    [Space]
+
+    [Header("Crouch")]
+    [SerializeField] private float crouch_height_modifier; // a decimal value from 0.1-0.9 that tells you 
+    // what percentage of the sprite/hitbox is active if the user crouches. Ex: If the modifier if 0.5, that means
+    // that the character crouches to 50% of their height, and thus only half of their capsule collider should exist.
+
+
     private Vector2 direction; // movement direction
+    private Vector2 hitbox_size_original; // width and height of capsule collider
+    private Vector2 hitbox_offset_original; // original hitbox offset
+
     private int jump_count = 2; // how many times can we jump
     private bool grounded = false; // is the character touching ground?
     private bool try_jump = false; // is the player trying to jump?
     private bool jump_cancelled = false; // did player cancel jump?
 
+    private bool crouch = false; // is the player crouching
+    private bool try_uncrouch = false; // is the player trying to stand up
+    private bool ceiling_check = false; // is there a ceiling above us?
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         hitbox = GetComponent<CapsuleCollider2D>();
+        hitbox_size_original = hitbox.size;
+        hitbox_offset_original = hitbox.offset;
         // get reference to components, allows us to use built-in functions
     }
 
@@ -42,46 +59,88 @@ public class PlayerMovement : MonoBehaviour
         direction = new Vector2(x_component * movespeed, rb.velocity.y);
         grounded = IsGrounded();
 
-        if (grounded) {
+        if (grounded)
+        {
             jump_count = 2;
         }
 
-        if (Input.GetButtonDown("Jump")) {   
+        if (Input.GetButtonDown("Jump"))
+        {   
             // user presses jump
-            if (grounded) {
+            if (grounded)
+            {
                 try_jump = true;
                 jump_count--;
-            } else if (!grounded && (jump_count == 2)) {
+            } else if (!grounded && (jump_count == 2))
+            {
                 // we are in the air, but we still have 2 jumps
                 // i.e. we fell off a cliff
                 try_jump = true;
                 jump_count = 0; // only jump once
-            } else if (jump_count > 0) {
+            } else if (jump_count > 0)
+            {
                 // Player in air, but can still jump 
                 try_jump = true;
                 jump_count--;
             }
         }
         
-        if (Input.GetButtonUp("Jump") && !grounded) {
+        if (Input.GetButtonUp("Jump") && !grounded)
+        {
             // if the player cancelled the jump in mid-air, don't jump as high
             jump_cancelled = true;
         }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow) && grounded) // replace with key of choice
+        {
+            // user presses crouch
+            crouch = true;
+        } else if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
+            // user stops holding crouch
+
+            try_uncrouch = true;
+        }
+
     }
     private void FixedUpdate()
     {
         Move(direction);
-        if (try_jump) {
+        if (try_jump)
+        {
             Jump();
         }
         
-        if (jump_cancelled) {
-            if (rb.velocity.y > short_jumpspeed) {
+        if (jump_cancelled)
+        {
+            if (rb.velocity.y > short_jumpspeed)
+            {
                 // change characters velocity to short jump velocity
                 rb.velocity = new Vector2(rb.velocity.x, short_jumpspeed);
             }
             jump_cancelled = false;
         }               
+
+        if (crouch)
+        {
+            hitbox.size = new Vector2(hitbox_size_original.x, hitbox_size_original.y/2);
+            // when crouching, halve the height of hitbox, but don't change width
+            // we also need to move this hitbox to the base of the capsule
+            hitbox.offset = new Vector2(hitbox_offset_original.x, -(hitbox_size_original.y) / 4);
+        }
+
+        if (try_uncrouch)
+        {
+            if (!ceiling_check)
+            {
+                // no ceiling above us, safe to stand up
+                hitbox.size = hitbox_size_original;
+                hitbox.offset = hitbox_offset_original;
+                // go back to original hitbox size and offset
+                crouch = false;
+                try_uncrouch = false;
+            }
+        }
     } 
 
     private bool IsGrounded()
