@@ -7,12 +7,14 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
     private CapsuleCollider2D hitbox;
-    public LayerMask groundLayer;
+    public LayerMask groundLayer; // what is considered ground
+    public LayerMask ceilingLayer; // what is considered ceiling
     
     [Header("Speeds")]
     [SerializeField] private float movespeed;
     [SerializeField] private float jumpspeed;
     [SerializeField] private float short_jumpspeed; // jump speed if jump button only tapped
+    [SerializeField] private float crouchspeed; // speed of character when crouching
 
     [Space]
 
@@ -23,11 +25,11 @@ public class PlayerMovement : MonoBehaviour
     [Space]
 
     [Header("Crouch")]
-    [SerializeField] private float crouchspeed; // speed of character when crouching
-    [SerializeField] private float crouch_height_modifier; // a decimal value from 0.1-0.9 that tells you 
-    // what percentage of the sprite/hitbox is active if the user crouches. Ex: If the modifier if 0.5, that means
-    // that the character crouches to 50% of their height, and thus only half of their capsule collider should exist.
 
+    [SerializeField] private float crouch_height_modifier; // a decimal value from 0.1-0.9 that tells you 
+    // that the character crouches to 50% of their height, and thus only half of their capsule collider should exist.
+    [SerializeField] private Vector2 ceiling_check_offset; // where should our circle detecting ground be located?
+    [SerializeField] private float ceiling_check_radius = 0.25f; // how big should our ground check circle be
 
     private Vector2 direction; // movement direction
     private Vector2 hitbox_size_original; // width and height of capsule collider
@@ -67,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         grounded = IsGrounded();
+        ceiling_check = UnderCeiling();
 
         if (grounded)
         {
@@ -104,10 +107,9 @@ public class PlayerMovement : MonoBehaviour
         {
             // user presses crouch
             crouch = true;
-        } else if (Input.GetKeyUp(KeyCode.DownArrow))
+        } else if (Input.GetKeyUp(KeyCode.DownArrow) && !ceiling_check)
         {
-            // user stops holding crouch
-
+            // user stops holding crouch and not under ceiling
             try_uncrouch = true;
         }
 
@@ -140,21 +142,23 @@ public class PlayerMovement : MonoBehaviour
 
         if (try_uncrouch)
         {
-            if (!ceiling_check)
-            {
-                // no ceiling above us, safe to stand up
-                hitbox.size = hitbox_size_original;
-                hitbox.offset = hitbox_offset_original;
-                // go back to original hitbox size and offset
-                crouch = false;
-                try_uncrouch = false;
-            }
+            // no ceiling above us, safe to stand up
+            hitbox.size = hitbox_size_original;
+            hitbox.offset = hitbox_offset_original;
+            // go back to original hitbox size and offset
+            crouch = false;
+            try_uncrouch = false;
         }
     } 
 
     private bool IsGrounded()
     {
         return Physics2D.OverlapCircle((Vector2)transform.position + grounded_offset, grounded_radius, groundLayer);
+    }
+
+    private bool UnderCeiling()
+    {
+        return Physics2D.OverlapCircle((Vector2)transform.position + ceiling_check_offset, ceiling_check_radius, ceilingLayer); ;
     }
 
     private void Move(Vector2 direction) 
@@ -174,5 +178,7 @@ public class PlayerMovement : MonoBehaviour
         // Draw the circle that detects where ground is
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere((Vector2)transform.position + grounded_offset, grounded_radius);
+        Gizmos.DrawWireSphere((Vector2)transform.position + ceiling_check_offset, ceiling_check_radius);
+
     }
 }
