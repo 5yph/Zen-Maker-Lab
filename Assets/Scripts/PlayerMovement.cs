@@ -107,10 +107,12 @@ public class PlayerMovement : MonoBehaviour
         {
             // user presses crouch
             crouch = true;
-        } else if (Input.GetKeyUp(KeyCode.DownArrow) && !ceiling_check)
+            try_uncrouch = false;
+        } else if (Input.GetKeyUp(KeyCode.DownArrow))
         {
-            // user stops holding crouch and not under ceiling
             try_uncrouch = true;
+            crouch = false;
+            // user stops holding crouch
         }
 
     }
@@ -142,12 +144,18 @@ public class PlayerMovement : MonoBehaviour
 
         if (try_uncrouch)
         {
-            // no ceiling above us, safe to stand up
-            hitbox.size = hitbox_size_original;
-            hitbox.offset = hitbox_offset_original;
-            // go back to original hitbox size and offset
-            crouch = false;
-            try_uncrouch = false;
+            if (!ceiling_check)
+            {
+                // no ceiling above us, safe to stand up
+                hitbox.size = hitbox_size_original;
+                hitbox.offset = hitbox_offset_original;
+                // go back to original hitbox size and offset
+                crouch = false;
+                try_uncrouch = false;
+            }
+            // if there is a ceiling, we keep trying to uncrouch until
+            // we find there isn't a ceiling -- unless the user presses crouch again
+
         }
     } 
 
@@ -175,7 +183,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // Draw the circle that detects where ground is
+        // Draw the circle that detects where ground + ceiling is
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere((Vector2)transform.position + grounded_offset, grounded_radius);
         Gizmos.DrawWireSphere((Vector2)transform.position + ceiling_check_offset, ceiling_check_radius);
