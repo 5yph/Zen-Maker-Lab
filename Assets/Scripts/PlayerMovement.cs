@@ -119,6 +119,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         Move(direction);
+
         if (try_jump)
         {
             Jump();
@@ -126,36 +127,22 @@ public class PlayerMovement : MonoBehaviour
         
         if (jump_cancelled)
         {
-            if (rb.velocity.y > short_jumpspeed)
-            {
-                // change characters velocity to short jump velocity
-                rb.velocity = new Vector2(rb.velocity.x, short_jumpspeed);
-            }
-            jump_cancelled = false;
+            JumpCancel();
         }               
 
         if (crouch)
         {
-            hitbox.size = new Vector2(hitbox_size_original.x, hitbox_size_original.y/2);
-            // when crouching, halve the height of hitbox, but don't change width
-            // we also need to move this hitbox to the base of the capsule
-            hitbox.offset = new Vector2(hitbox_offset_original.x, -(hitbox_size_original.y) / 4);
+            Crouch();
         }
 
         if (try_uncrouch)
         {
             if (!ceiling_check)
             {
-                // no ceiling above us, safe to stand up
-                hitbox.size = hitbox_size_original;
-                hitbox.offset = hitbox_offset_original;
-                // go back to original hitbox size and offset
-                crouch = false;
-                try_uncrouch = false;
+                unCrouch();
+                // if there is a ceiling, we keep trying to uncrouch until
+                // we find there isn't a ceiling -- unless the user presses crouch again
             }
-            // if there is a ceiling, we keep trying to uncrouch until
-            // we find there isn't a ceiling -- unless the user presses crouch again
-
         }
     } 
 
@@ -179,6 +166,35 @@ public class PlayerMovement : MonoBehaviour
     {
         rb.velocity = new Vector2(0, jumpspeed);
         try_jump = false;
+    }
+
+    private void JumpCancel()
+    {
+        if (rb.velocity.y > short_jumpspeed)
+        {
+            // change characters velocity to short jump velocity
+            rb.velocity = new Vector2(rb.velocity.x, short_jumpspeed);
+        }
+        jump_cancelled = false;
+    }
+
+
+    private void Crouch()
+    {
+        hitbox.size = new Vector2(hitbox_size_original.x, hitbox_size_original.y / 2);
+        // when crouching, halve the height of hitbox, but don't change width
+        // we also need to move this hitbox to the base of the capsule
+        hitbox.offset = new Vector2(hitbox_offset_original.x, -(hitbox_size_original.y) / 4);
+    }
+
+    private void unCrouch()
+    {
+        // no ceiling above us, safe to stand up
+        hitbox.size = hitbox_size_original;
+        hitbox.offset = hitbox_offset_original;
+        // go back to original hitbox size and offset
+        crouch = false;
+        try_uncrouch = false;
     }
 
     private void OnDrawGizmos()
