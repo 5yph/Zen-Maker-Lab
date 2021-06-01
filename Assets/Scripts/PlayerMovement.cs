@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -26,8 +27,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Crouch")]
 
-    [SerializeField] private float crouch_height_modifier; // a decimal value from 0.1-0.9 that tells you 
-    // that the character crouches to 50% of their height, and thus only half of their capsule collider should exist.
+    [SerializeField] private float crouch_height_modifier; // a decimal value from 0.5-0.99 that tells you 
+    // what percentage of original height the crouched height will be. DO NOT SET LOWER THAN 0.5
     [SerializeField] private Vector2 ceiling_check_offset; // where should our circle detecting ground be located?
     [SerializeField] private float ceiling_check_radius = 0.25f; // how big should our ground check circle be
 
@@ -181,10 +182,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Crouch()
     {
-        hitbox.size = new Vector2(hitbox_size_original.x, hitbox_size_original.y / 2);
+        hitbox.size = new Vector2(hitbox_size_original.x, hitbox_size_original.y * crouch_height_modifier);
         // when crouching, halve the height of hitbox, but don't change width
         // we also need to move this hitbox to the base of the capsule
-        hitbox.offset = new Vector2(hitbox_offset_original.x, -(hitbox_size_original.y) / 4);
+
+        hitbox.offset = new Vector2(hitbox_offset_original.x, -(hitbox_size_original.y - hitbox.size.y)/2);
     }
 
     private void unCrouch()
