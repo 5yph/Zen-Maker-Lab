@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     [Space]
 
     [Header("Crouch")]
+    [SerializeField] private float crouchspeed; // speed of character when crouching
     [SerializeField] private float crouch_height_modifier; // a decimal value from 0.1-0.9 that tells you 
     // what percentage of the sprite/hitbox is active if the user crouches. Ex: If the modifier if 0.5, that means
     // that the character crouches to 50% of their height, and thus only half of their capsule collider should exist.
@@ -56,7 +57,15 @@ public class PlayerMovement : MonoBehaviour
         float x_component = Input.GetAxisRaw("Horizontal");
         float y_component = Input.GetAxisRaw("Vertical");
 
-        direction = new Vector2(x_component * movespeed, rb.velocity.y);
+        if (!crouch)
+        {
+            // uncrouched movespeed
+            direction = new Vector2(x_component * movespeed, rb.velocity.y);
+        } else
+        {
+            direction = new Vector2(x_component * crouchspeed, rb.velocity.y);
+        }
+
         grounded = IsGrounded();
 
         if (grounded)
