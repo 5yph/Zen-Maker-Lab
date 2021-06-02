@@ -29,8 +29,6 @@ public class PlayerMovement1Template : MonoBehaviour
 
         float x_component = Input.GetAxisRaw("Horizontal");
         // Input.GetAxisRaw() returns 1 if going right, -1 if going left
-        float y_component = Input.GetAxisRaw("Vertical");
-        // Will use later
 
         direction = new Vector2(x_component * movespeed, rb.velocity.y);
         // direction is a 2D vector that points to where we are moving
@@ -63,6 +61,5 @@ public class PlayerMovement1Template : MonoBehaviour
         rb.velocity = new Vector2(0, jumpspeed);
         try_jump = false;
     }
-
 
 }

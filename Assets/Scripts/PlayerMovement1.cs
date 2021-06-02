@@ -25,7 +25,6 @@ public class PlayerMovement1 : MonoBehaviour
     {   // detect input in Update() so we don't miss any inputs
 
         float x_component = Input.GetAxisRaw("Horizontal");
-        float y_component = Input.GetAxisRaw("Vertical");
 
         direction = new Vector2(x_component * movespeed, rb.velocity.y);
 

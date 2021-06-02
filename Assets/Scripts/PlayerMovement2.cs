@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// SOLUTIONS TO THE SECOND MOVEMENT TEMPLATE (not actual source code)
+
 public class PlayerMovement2 : MonoBehaviour
 {
     private Rigidbody2D rb;
@@ -36,7 +38,6 @@ public class PlayerMovement2 : MonoBehaviour
     {   // detect input in Update() so we don't miss any inputs
 
         float x_component = Input.GetAxisRaw("Horizontal");
-        float y_component = Input.GetAxisRaw("Vertical");
 
         direction = new Vector2(x_component * movespeed, rb.velocity.y);
         grounded = IsGrounded();
@@ -78,6 +79,7 @@ public class PlayerMovement2 : MonoBehaviour
     private void FixedUpdate()
     {
         Move(direction);
+
         if (try_jump)
         {
             Jump();
@@ -85,12 +87,7 @@ public class PlayerMovement2 : MonoBehaviour
 
         if (jump_cancelled)
         {
-            if (rb.velocity.y > short_jumpspeed)
-            {
-                // change characters velocity to short jump velocity
-                rb.velocity = new Vector2(rb.velocity.x, short_jumpspeed);
-            }
-            jump_cancelled = false;
+            JumpCancel();
         }
     }
 
@@ -109,6 +106,16 @@ public class PlayerMovement2 : MonoBehaviour
     {
         rb.velocity = new Vector2(0, jumpspeed);
         try_jump = false;
+    }
+
+    private void JumpCancel()
+    {
+        if (rb.velocity.y > short_jumpspeed)
+        {
+            // change characters velocity to short jump velocity
+            rb.velocity = new Vector2(rb.velocity.x, short_jumpspeed);
+        }
+        jump_cancelled = false;
     }
 
     private void OnDrawGizmos()

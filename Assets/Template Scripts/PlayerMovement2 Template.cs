@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// SOLUTIONS TO THE SECOND MOVEMENT TEMPLATE (not actual source code)
+// SECOND MOVEMENT TEMPLATE
 public class PlayerMovement2Template : MonoBehaviour
 {
     public Rigidbody2D rb;
@@ -37,7 +37,6 @@ public class PlayerMovement2Template : MonoBehaviour
     {   // detect input in Update() so we don't miss any inputs
 
         float x_component = Input.GetAxisRaw("Horizontal");
-        float y_component = Input.GetAxisRaw("Vertical");
 
         direction = new Vector2(x_component * movespeed, rb.velocity.y);
         
@@ -84,19 +83,7 @@ public class PlayerMovement2Template : MonoBehaviour
 
         if (jump_cancelled)
         {
-            if (rb.velocity.y > short_jumpspeed)
-            {
-                /* In this section of code, the player cancelled the jump.
-                 When the jump is cancelled, we want the character to have a smaller jump.
-                 We do this by checking if the character's current velocity is bigger than
-                 the short jumpspeed. If it is, we should correct it by setting the velocity
-                 of our rigid body to a new vector that represents the correct jumpspeed. Implement this.
-                
-                 Hint: The x-component of the new vector shouldn't change, just the y-component.
-                 */
-
-            }
-            jump_cancelled = false;
+            JumpCancel();
         }
 
     }
@@ -119,6 +106,24 @@ public class PlayerMovement2Template : MonoBehaviour
         rb.velocity = new Vector2(0, jumpspeed);
         try_jump = false;
     }
+
+    private void JumpCancel()
+    {
+        if (rb.velocity.y > short_jumpspeed)
+        {
+            /* In this section of code, the player cancelled the jump.
+             When the jump is cancelled, we want the character to have a smaller jump.
+             We do this by checking if the character's current velocity is bigger than
+             the short jumpspeed. If it is, we should correct it by setting the velocity
+             of our rigid body to a new vector that represents the correct jumpspeed. Implement this.
+
+             Hint: The x-component of the new vector shouldn't change, just the y-component.
+             */
+
+        }
+        jump_cancelled = false;
+    }
+
     private void OnDrawGizmos()
     {
         // Draw the circle that detects where ground is

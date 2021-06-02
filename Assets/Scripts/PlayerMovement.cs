@@ -140,7 +140,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (!ceiling_check)
             {
-                unCrouch();
+                UnCrouch();
                 // if there is a ceiling, we keep trying to uncrouch until
                 // we find there isn't a ceiling -- unless the user presses crouch again
             }
@@ -154,7 +154,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool UnderCeiling()
     {
-        return Physics2D.OverlapCircle((Vector2)transform.position + ceiling_check_offset, ceiling_check_radius, ceilingLayer); ;
+        return Physics2D.OverlapCircle((Vector2)transform.position + ceiling_check_offset, ceiling_check_radius, ceilingLayer);
     }
 
     private void Move(Vector2 direction) 
@@ -179,7 +179,6 @@ public class PlayerMovement : MonoBehaviour
         jump_cancelled = false;
     }
 
-
     private void Crouch()
     {
         hitbox.size = new Vector2(hitbox_size_original.x, hitbox_size_original.y * crouch_height_modifier);
@@ -189,7 +188,7 @@ public class PlayerMovement : MonoBehaviour
         hitbox.offset = new Vector2(hitbox_offset_original.x, -(hitbox_size_original.y - hitbox.size.y)/2);
     }
 
-    private void unCrouch()
+    private void UnCrouch()
     {
         // no ceiling above us, safe to stand up
         hitbox.size = hitbox_size_original;
