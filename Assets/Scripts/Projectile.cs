@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float projectile_speed = 20f;
+    // [SerializeField] private float projectile_speed = 20f;
     [SerializeField] private float lifespan = 3f; // how long the projectile is alive (in seconds)
-    [SerializeField] private bool shoots_left = false; // projectile travels left (default is right)
-    [SerializeField] private bool arc = false; // projectile arcs instead of shooting straight
+    [SerializeField] private bool gravity = false; // projectile uses gravity
+    [SerializeField] private bool turn_off_ray = false;
+
+    public Vector2 velocity; // 2D vector representing direction of projectile 
 
     private Rigidbody2D projectile;
 
@@ -19,10 +21,11 @@ public class Projectile : MonoBehaviour
 
     private void Start()
     {
-        if (!arc)
+        if (!gravity)
         {
             projectile.gravityScale = 0; // turn gravity off if no arc wanted
         }
+
         Destroy(gameObject, lifespan);
         // kill the projectile after some time
     }
@@ -34,8 +37,18 @@ public class Projectile : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.position = transform.position + new Vector3(projectile_speed * Time.fixedDeltaTime, 0, 0);
-
+            transform.position = transform.position + new Vector3(velocity.x * Time.fixedDeltaTime, velocity.y * Time.fixedDeltaTime, 0);
     }
 
+    private void OnDrawGizmos()
+    {   
+        if (turn_off_ray)
+        {
+            return;
+        }
+
+        // Draws the vector line of where the projectile will head
+        Gizmos.color = Color.blue;
+        Gizmos.DrawRay(transform.position, new Vector3(velocity.x, velocity.y, 0));
+    }
 }
