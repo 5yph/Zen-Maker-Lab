@@ -19,6 +19,12 @@ public class Damage : MonoBehaviour
         {
             DealDamage(1); 
         }
+
+        if (collision.gameObject.tag == "Enemy")
+        {
+            DealDamage(1);
+        }
+
     }
 
     public void DealDamage(int damage) // make this public so anything can deal damage to player
@@ -26,12 +32,13 @@ public class Damage : MonoBehaviour
         life = life - damage;
         if (life <= 0)
         {
-            Respawn();
+            Die();
         }
     }
 
-    private void Respawn()
+    public void Die() // public so anything can cause instant death (like falling in hole)
     {
+        // Respawn
         transform.position = Spawn.position;
         // move our character back to spawn position
     }
