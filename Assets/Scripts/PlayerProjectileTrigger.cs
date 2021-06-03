@@ -6,21 +6,21 @@ public class PlayerProjectileTrigger : MonoBehaviour
 {
     public GameObject projectile; // what projectile is this object shooting
     public Transform spawn; // where projectiles spawn (should be child object)
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    
+    [SerializeField] private float cooldown; // fire rate of projectile, in seconds
+    private float next_time_can_fire; // when we can fire the next projectile
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetButtonDown("Fire1"))
         {
-            // if user presses the fire button
-            Instantiate(projectile, spawn.position, spawn.rotation);
-            // Destroy(projectile, 5f);
+            if (next_time_can_fire <= Time.time)
+            {
+                // if user presses the fire button
+                Instantiate(projectile, spawn.position, spawn.rotation);
+                next_time_can_fire = Time.time + cooldown; // next time we can fire is current time + cooldown
+            }
         }
 
     }
