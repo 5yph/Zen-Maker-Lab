@@ -13,7 +13,7 @@ public class PlayerProjectileTrigger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButton("Fire1")) // Get button allows you to hold the button
         {
             if (next_time_can_fire <= Time.time)
             {
