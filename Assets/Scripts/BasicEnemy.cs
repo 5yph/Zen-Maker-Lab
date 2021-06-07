@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BasicEnemy : MonoBehaviour
@@ -8,6 +9,8 @@ public class BasicEnemy : MonoBehaviour
 
     [SerializeField] private float movespeed = 5f;
     [SerializeField] private bool moves_right = false; // does the enemy move right? (default is left)
+    [SerializeField] private bool invincible = false; // can enemy die by player?
+    private float speed; // used to check if enemy is moving
 
     private Rigidbody2D enemy;
 
@@ -17,23 +20,34 @@ public class BasicEnemy : MonoBehaviour
         enemy = GetComponent<Rigidbody2D>();
     }
 
+    private void Update()
+    {
+        speed = enemy.velocity.magnitude;
+        if (speed < 0.5)
+        {
+            // check if our enemy not moving, flip direction
+            // don't put speed at 0 as sometimes it may not register
+            moves_right = !moves_right;
+            // if we were moving right, we now move left. If we were moving left, we now move right
+            Move();
+        }
+    }
+
     void FixedUpdate()
     {
-        if (moves_right)
-        {
-            enemy.velocity = new Vector2(movespeed, enemy.velocity.y);
-        } else
-        {
-            enemy.velocity = new Vector2(-movespeed, enemy.velocity.y);
-        }
+        Move();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "FriendlyProjectile")
         {
-            Destroy(gameObject);
-            // if enemy gets hit with player projectile, it should die.
+            if (!invincible)
+            {
+                Destroy(gameObject);
+                // if enemy gets hit with player projectile, it should die.
+            }
+
             Destroy(collision.gameObject); 
             // the projectile is also destroyed
         }
@@ -44,6 +58,28 @@ public class BasicEnemy : MonoBehaviour
             collision.gameObject.GetComponent<Damage>().DealDamage(1);
         }
 
+        if (collision.gameObject.tag == "Pit")
+        {
+            // falling in a pit results in instant death
+            Destroy(gameObject);
+        }
+
+    }
+
+    private void Move()
+    {
+        if (enemy.velocity.y < 0.1)
+        {
+            // we don't want the enemy to move if it's in the air 
+            if (moves_right)
+            {
+                enemy.velocity = new Vector2(movespeed, enemy.velocity.y);
+            }
+            else
+            {
+                enemy.velocity = new Vector2(-movespeed, enemy.velocity.y);
+            }
+        }
     }
 
 }
