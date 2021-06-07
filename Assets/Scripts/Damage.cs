@@ -7,12 +7,6 @@ public class Damage : MonoBehaviour
     public float life = 1;
     public Transform Spawn; // where we respawn
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Spikes")
@@ -20,11 +14,13 @@ public class Damage : MonoBehaviour
             DealDamage(1); 
         }
 
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Pit")
         {
-            DealDamage(1);
+            // falling in a pit results in instant death
+            Die();
         }
 
+        // We will code enemy damage in their respective scripts
     }
 
     public void DealDamage(int damage) // make this public so anything can deal damage to player
@@ -36,7 +32,7 @@ public class Damage : MonoBehaviour
         }
     }
 
-    public void Die() // public so anything can cause instant death (like falling in hole)
+    public void Die() // public so anything can cause instant death
     {
         // Respawn
         transform.position = Spawn.position;
