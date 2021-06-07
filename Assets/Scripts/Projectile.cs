@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    // [SerializeField] private float projectile_speed = 20f;
     [SerializeField] private float lifespan = 3f; // how long the projectile is alive (in seconds)
     [SerializeField] private bool gravity = false; // projectile uses gravity
     [SerializeField] private bool turn_off_ray = false;
