@@ -29,11 +29,6 @@ public class Projectile : MonoBehaviour
         // kill the projectile after some time
     }
 
-    void Update()
-    {
-        // if projectile collides with enemy...
-    }
-
     private void FixedUpdate()
     {
             transform.position = transform.position + new Vector3(velocity.x * Time.fixedDeltaTime, velocity.y * Time.fixedDeltaTime, 0);
