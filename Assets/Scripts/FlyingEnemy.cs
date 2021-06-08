@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 public class FlyingEnemy : MonoBehaviour
 {
     [SerializeField] private float movespeed = 3f;
+    [SerializeField] private bool invincible = false;
     private Vector2 direction;
     private bool to_point_2 = true; // are we going to point 2
 
@@ -51,6 +52,29 @@ public class FlyingEnemy : MonoBehaviour
     {
         direction.Normalize(); // only care about the direction
         enemy.velocity = direction * movespeed;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // same as basic enemy, but we exclude pit
+
+        if (collision.gameObject.tag == "FriendlyProjectile")
+        {
+            if (!invincible)
+            {
+                Destroy(gameObject);
+                // if enemy gets hit with player projectile, it should die.
+            }
+
+            Destroy(collision.gameObject);
+            // the projectile is also destroyed
+        }
+
+        if (collision.gameObject.tag == "Player")
+        {
+            // if enemy hits a player, we deal damage to them
+            collision.gameObject.GetComponent<Damage>().DealDamage(1);
+        }
     }
 
     private void OnDrawGizmos()
