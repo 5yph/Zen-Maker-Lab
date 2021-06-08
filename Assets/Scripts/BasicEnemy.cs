@@ -69,7 +69,6 @@ public class BasicEnemy : MonoBehaviour
     private void Move()
     {
 
-        // we don't want the enemy to move if it's in the air 
         if (moves_right)
         {
             enemy.velocity = new Vector2(movespeed, enemy.velocity.y);
