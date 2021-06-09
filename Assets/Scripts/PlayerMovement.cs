@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Vector2 ceiling_check_offset; // where should our circle detecting ground be located?
     [SerializeField] private float ceiling_check_radius = 0.25f; // how big should our ground check circle be
 
-    private Vector2 direction; // movement direction
+    public Vector2 direction; // movement direction
     private Vector2 hitbox_size_original; // width and height of capsule collider
     private Vector2 hitbox_offset_original; // original hitbox offset
 
