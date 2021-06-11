@@ -68,7 +68,6 @@ public class BasicEnemy : MonoBehaviour
 
     private void Move()
     {
-
         if (moves_right)
         {
             enemy.velocity = new Vector2(movespeed, enemy.velocity.y);
@@ -77,7 +76,5 @@ public class BasicEnemy : MonoBehaviour
         {
             enemy.velocity = new Vector2(-movespeed, enemy.velocity.y);
         }
-
     }
-
 }
