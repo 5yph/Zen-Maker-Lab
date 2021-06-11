@@ -20,7 +20,7 @@ public class BasicEnemy : MonoBehaviour
         enemy = GetComponent<Rigidbody2D>();
     }
 
-    private void Update()
+    void Update()
     {
         speed = enemy.velocity.magnitude;
         if (speed < 0.5)
