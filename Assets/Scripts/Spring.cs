@@ -22,12 +22,10 @@ public class Spring : MonoBehaviour
         }
     }
 
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         obj = collision.gameObject.GetComponent<Rigidbody2D>();
         obj.velocity = new Vector2(0, 0); // freeze the player before they bounce, more cartoony
         obj.velocity = direction * spring_force;
     }
-
 }
