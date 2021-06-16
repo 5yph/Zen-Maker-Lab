@@ -41,9 +41,9 @@ public class PlayerMovement : MonoBehaviour
     private bool try_jump = false; // is the player trying to jump?
     private bool jump_cancelled = false; // did player cancel jump?
 
-    public bool crouch = false; // is the player crouching
-    public bool try_uncrouch = false; // is the player trying to stand up
-    public bool ceiling_check = false; // is there a ceiling above us?
+    [HideInInspector] public bool crouch = false; // is the player crouching
+    [HideInInspector] public bool try_uncrouch = false; // is the player trying to stand up
+    [HideInInspector] public bool ceiling_check = false; // is there a ceiling above us?
 
     void Start()
     {
@@ -103,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
             jump_cancelled = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow) && grounded) // replace with key of choice
+        if (Input.GetKey(KeyCode.DownArrow) && grounded) // replace with key of choice
         {
             // user presses crouch
             crouch = true;
