@@ -41,9 +41,9 @@ public class PlayerMovement : MonoBehaviour
     private bool try_jump = false; // is the player trying to jump?
     private bool jump_cancelled = false; // did player cancel jump?
 
-    private bool crouch = false; // is the player crouching
-    private bool try_uncrouch = false; // is the player trying to stand up
-    private bool ceiling_check = false; // is there a ceiling above us?
+    public bool crouch = false; // is the player crouching
+    public bool try_uncrouch = false; // is the player trying to stand up
+    public bool ceiling_check = false; // is there a ceiling above us?
 
     void Start()
     {
