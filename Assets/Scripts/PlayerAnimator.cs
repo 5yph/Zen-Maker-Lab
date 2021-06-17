@@ -8,6 +8,9 @@ public class PlayerAnimator : MonoBehaviour
     PlayerProjectileTrigger shooter;
     Animator animator;
     Rigidbody2D rb;
+    SpriteRenderer sprite;
+
+    public bool facing_right = true; // Sprite by default is facing right
 
     // Start is called before the first frame update
     void Start()
@@ -16,11 +19,22 @@ public class PlayerAnimator : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         player = GetComponent<PlayerMovement>();
         shooter = GetComponent<PlayerProjectileTrigger>();
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // flip character if move direction is opposite to before
+        float direction = Input.GetAxisRaw("Horizontal");
+        if (direction > 0 && !facing_right)
+        {
+            Flip();
+        } else if (direction < 0 && facing_right)
+        {
+            Flip();
+        }
+
         if (player.direction.magnitude < 0.1)
         {
             // not moving
@@ -30,12 +44,12 @@ public class PlayerAnimator : MonoBehaviour
             animator.SetBool("Moving", true);
         }
 
-        if (rb.velocity.y > 0.001)
+        if (rb.velocity.y > 0.1)
         {
             // player is shooting up into the air
             animator.SetBool("Falling", false);
             animator.SetBool("Jumping", true);
-        } else if (rb.velocity.y < -0.001)
+        } else if (rb.velocity.y < -0.1)
         {
             // player is falling
             animator.SetBool("Jumping", false);
@@ -66,5 +80,17 @@ public class PlayerAnimator : MonoBehaviour
         {
             animator.SetBool("Shooting", false);
         }
+
+    }
+
+    void Flip()
+    {
+        // Flip the parent object and all attached child objects
+
+        Vector3 newScale = transform.localScale;
+        newScale.x = newScale.x * -1;
+        transform.localScale = newScale;
+
+        facing_right = !facing_right;
     }
 }
