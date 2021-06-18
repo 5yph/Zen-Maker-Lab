@@ -21,8 +21,9 @@ public class BasicEnemy : MonoBehaviour
 
     void Update()
     {
+
         speed = enemy.velocity.magnitude;
-        if (speed < 0.5)
+        if (speed < 0.1)
         {
             // check if our enemy not moving, flip direction
             // don't put speed at 0 as sometimes it may not register
