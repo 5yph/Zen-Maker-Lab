@@ -8,9 +8,9 @@ public class PlayerProjectileTrigger : MonoBehaviour
     public GameObject projectile; // what projectile is this object shooting
     public Transform spawn; // where projectiles spawn (should be child object)
 
-    // CHANGE this depending on where I decide to move the facing_right variable
     PlayerAnimator animator;
     Projectile projectile_settings;
+    Damage damage;
     
     [SerializeField] private float cooldown; // fire rate of projectile, in seconds
     private float next_time_can_fire; // when we can fire the next projectile
@@ -20,12 +20,13 @@ public class PlayerProjectileTrigger : MonoBehaviour
     {
         animator = GetComponent<PlayerAnimator>();
         projectile_settings = projectile.GetComponent<Projectile>();
+        damage = GetComponent<Damage>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButton("Fire1")) // Get button allows you to hold the button
+        if (Input.GetButton("Fire1") && !damage.dead && !damage.respawning) // Shoot if holding button and not dead or respawning
         {
             // We need to account for the direction our player is facing
             // Since the projectile spawn point is flips with the player, we just 
