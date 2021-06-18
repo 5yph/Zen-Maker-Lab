@@ -7,7 +7,8 @@ public class SmartEnemy : MonoBehaviour
     [SerializeField] private float movespeed = 3f;
     [SerializeField] private bool moves_right = false; 
     [SerializeField] private bool invincible = false;
-    [SerializeField] private float offset = 3f;
+    [SerializeField] private float offset = 3f; // where the raycast originates
+    [SerializeField] private float distance = 2f; // how far down the raycast points
    
     private float speed; // used to check if enemy is moving
 
@@ -38,7 +39,7 @@ public class SmartEnemy : MonoBehaviour
         }
 
         speed = enemy.velocity.magnitude;
-        if (speed < 0.5)
+        if (speed < 0.1)
         {
             // check if our enemy not moving, flip direction
             // don't put speed at 0 as sometimes it may not register
@@ -48,7 +49,7 @@ public class SmartEnemy : MonoBehaviour
         }
 
         offset_vec = new Vector2(transform.position.x + offset, transform.position.y);
-        hit = Physics2D.Raycast(offset_vec, -Vector2.up, groundLayer);
+        hit = Physics2D.Raycast(offset_vec, -Vector2.up, distance, groundLayer);
         // cast raycast straight down, in front of our enemy by a bit.
         if (hit.collider == null)
         {
@@ -96,6 +97,13 @@ public class SmartEnemy : MonoBehaviour
             enemy.velocity = new Vector2(-movespeed, enemy.velocity.y);
         }
 
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Draw raycast line for debugging
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(new Vector2(transform.position.x + offset, transform.position.y), -Vector2.up * distance);
     }
 
 }
