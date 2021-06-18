@@ -30,14 +30,24 @@ public class Damage : MonoBehaviour
             DealDamage(1); 
         }
 
+        // We will code enemy damage in their respective scripts
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // triggers are colliders that are passable, but can still be detected for collisions
+        if (collision.gameObject.tag == "Checkpoint")
+        {
+            Spawn = collision.transform; // make the new spawn our checkpoint position
+        }
+
         if (collision.gameObject.tag == "Pit")
         {
             // falling in a pit results in instant death
             Die();
         }
-
-        // We will code enemy damage in their respective scripts
     }
+
 
     public void DealDamage(int damage) // make this public so anything can deal damage to player
     {
