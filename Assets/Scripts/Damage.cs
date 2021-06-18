@@ -6,7 +6,7 @@ public class Damage : MonoBehaviour
 {
     public float life = 1;
     public Transform Spawn; // where we respawn
-    [HideInInspector] public bool dead; // are we dead?
+    [HideInInspector] public bool dead = false; // are we dead?
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -39,6 +39,7 @@ public class Damage : MonoBehaviour
         // Respawn
         transform.position = Spawn.position;
         // move our character back to spawn position
+        dead = false; // respawned
     }
 
 }
