@@ -6,6 +6,7 @@ public class Damage : MonoBehaviour
 {
     public float life = 1;
     public Transform Spawn; // where we respawn
+    [HideInInspector] public bool dead; // are we dead?
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -28,6 +29,7 @@ public class Damage : MonoBehaviour
         life = life - damage;
         if (life <= 0)
         {
+            dead = true;
             Die();
         }
     }
