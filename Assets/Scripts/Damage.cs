@@ -36,10 +36,6 @@ public class Damage : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // triggers are colliders that are passable, but can still be detected for collisions
-        if (collision.gameObject.tag == "Checkpoint")
-        {
-            Spawn = collision.transform; // make the new spawn our checkpoint position
-        }
 
         if (collision.gameObject.tag == "Pit")
         {
@@ -47,7 +43,6 @@ public class Damage : MonoBehaviour
             Die();
         }
     }
-
 
     public void DealDamage(int damage) // make this public so anything can deal damage to player
     {
@@ -89,6 +84,12 @@ public class Damage : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         // Go back to default constraints (freezing rotation).
         rb.velocity = Vector2.down; // add some gravity so it doesn't freeze in air
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.black;
+        Gizmos.DrawSphere(Spawn.position, 1f);
     }
 
 }
