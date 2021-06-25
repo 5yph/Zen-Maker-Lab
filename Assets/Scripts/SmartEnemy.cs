@@ -82,7 +82,7 @@ public class SmartEnemy : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             // if enemy hits a player, we deal damage to them
-            collision.gameObject.GetComponent<Damage>().DealDamage(1);
+            collision.gameObject.GetComponent<Damage>().Die();
         }
     }
     private void Move()

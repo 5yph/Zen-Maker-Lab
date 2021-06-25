@@ -4,9 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class Damage : MonoBehaviour
-{
-    public int lives = 1;
-    private int current_life;
+{   // If player gets hit by enemy, he will insta-die
 
     public Transform Spawn; // where we respawn
     private Rigidbody2D rb;
@@ -18,7 +16,6 @@ public class Damage : MonoBehaviour
 
     private void Start()
     {
-        current_life = lives;
         rb = GetComponent<Rigidbody2D>();
         // get the death time from the animation script
     }
@@ -27,7 +24,7 @@ public class Damage : MonoBehaviour
     {
         if (collision.gameObject.tag == "Spikes")
         {
-            DealDamage(1); 
+            Die(); 
         }
 
         // We will code enemy damage in their respective scripts
@@ -40,15 +37,6 @@ public class Damage : MonoBehaviour
         if (collision.gameObject.tag == "Pit")
         {
             // falling in a pit results in instant death
-            Die();
-        }
-    }
-
-    public void DealDamage(int damage) // make this public so anything can deal damage to player
-    {
-        current_life = current_life - damage;
-        if (current_life <= 0)
-        {
             Die();
         }
     }
@@ -75,7 +63,6 @@ public class Damage : MonoBehaviour
         dead = false;
         respawning = true;
         transform.position = Spawn.position; // Go to respawn point
-        current_life = lives; // reset lives
 
         respawn_time = GetComponent<PlayerAnimator>().respawn_time;
         yield return new WaitForSeconds(respawn_time);

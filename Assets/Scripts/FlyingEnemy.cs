@@ -33,11 +33,12 @@ public class FlyingEnemy : MonoBehaviour
             // we are going to point 1
         }
 
-        if (Vector2.Distance(point2.position, transform.position) < 0.1f && to_point_2 == true)
+        // change buffer depending on size of enemy and area
+        if (Vector2.Distance(point2.position, transform.position) < 1f && to_point_2 == true)
         {
             // if we just arrived at point2 at a close enough distance
             to_point_2 = false;
-        } else if (Vector2.Distance(point1.position, transform.position) < 0.1f && to_point_2 == false)
+        } else if (Vector2.Distance(point1.position, transform.position) < 1f && to_point_2 == false)
         {
             // if we just arrived at point1
             to_point_2 = true;
@@ -70,7 +71,7 @@ public class FlyingEnemy : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             // if enemy hits a player, we deal damage to them
-            collision.gameObject.GetComponent<Damage>().DealDamage(1);
+            collision.gameObject.GetComponent<Damage>().Die();
         }
     }
 
