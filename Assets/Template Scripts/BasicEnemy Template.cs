@@ -24,7 +24,7 @@ public class BasicEnemyTemplate : MonoBehaviour
         speed = enemy.velocity.magnitude;
         // Get the current speed of our enemy
 
-        /* CODE an if statement that checks if our speed is sufficiently small (less than 0.5).
+        /* CODE an if statement that checks if our speed is sufficiently small (less than 0.1).
          If it is, that means our enemy has stopped, likely because they crashed into a wall.
          Then, we need to change the direction of our enemy, and finally call Move() so we can
          update which way it goes.
@@ -52,9 +52,9 @@ public class BasicEnemyTemplate : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             // if enemy hits a player, we deal damage to them
-            collision.gameObject.GetComponent<Damage>().DealDamage(1);
+            collision.gameObject.GetComponent<Damage>().Die();
             // Here, we get the 'Damage' script from the collided object, which is the player.
-            // Then, from that damage script, we can execute the public function DealDamage
+            // Then, from that damage script, we can execute the public function Die
         }
 
         /* CODE 2 more if statements here.

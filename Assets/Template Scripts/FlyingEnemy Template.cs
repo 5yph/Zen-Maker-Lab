@@ -72,8 +72,8 @@ public class FlyingEnemyTemplate : MonoBehaviour
 
         if (collision.gameObject.tag == "Player")
         {
-            // if enemy hits a player, we deal damage to them
-            collision.gameObject.GetComponent<Damage>().DealDamage(1);
+            // if enemy hits a player, we kill player
+            collision.gameObject.GetComponent<Damage>().Die();
         }
     }
 
