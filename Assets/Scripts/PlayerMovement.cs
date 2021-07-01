@@ -7,7 +7,9 @@ using UnityEngine.Assertions;
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private CapsuleCollider2D hitbox;
+    private CapsuleCollider2D[] hitboxes;
+
+    private CircleCollider2D crouch_hitbox; // hitbox for when we crouch
     public LayerMask groundLayer; // what is considered ground
     public LayerMask ceilingLayer; // what is considered ceiling
     
@@ -33,8 +35,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float ceiling_check_radius = 0.25f; // how big should our ground check circle be
 
     public Vector2 direction; // movement direction
-    private Vector2 hitbox_size_original; // width and height of capsule collider
-    private Vector2 hitbox_offset_original; // original hitbox offset
 
     private int jump_count = 2; // how many times can we jump
     private bool grounded = false; // is the character touching ground?
@@ -48,15 +48,14 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        hitbox = GetComponent<CapsuleCollider2D>();
-        hitbox_size_original = hitbox.size;
-        hitbox_offset_original = hitbox.offset;
+        hitboxes = GetComponents<CapsuleCollider2D>(); // doesn't matter which capsule collider it retrieves first
+        crouch_hitbox = GetComponent<CircleCollider2D>();
+        crouch_hitbox.enabled = false; // disable circle collider intially
         // get reference to components, allows us to use built-in functions
     }
 
     void Update()
     {   // detect input in Update() so we don't miss any inputs
-
         float x_component = Input.GetAxisRaw("Horizontal");
 
         if (!crouch)
@@ -103,16 +102,17 @@ public class PlayerMovement : MonoBehaviour
             jump_cancelled = true;
         }
 
-        if (Input.GetKey(KeyCode.DownArrow) && grounded) // replace with key of choice
+        if (Input.GetKey(KeyCode.S) && grounded) // replace with key of choice
         {
             // user presses crouch
             crouch = true;
             try_uncrouch = false;
-        } else if (Input.GetKeyUp(KeyCode.DownArrow))
+        } 
+        
+        if ((Input.GetKeyUp(KeyCode.S) || !grounded) && crouch)
         {
+            // user stops crouching if stops holding crouch or not on ground anymore
             try_uncrouch = true;
-            crouch = false;
-            // user stops holding crouch
         }
 
     }
@@ -180,19 +180,36 @@ public class PlayerMovement : MonoBehaviour
 
     private void Crouch()
     {
-        hitbox.size = new Vector2(hitbox_size_original.x, hitbox_size_original.y * crouch_height_modifier);
+
+        crouch_hitbox.enabled = true;
+
+        for (int i = 0; i < hitboxes.Length; i++)
+        {
+            hitboxes[i].enabled = false; // disable each collider
+        }
+
+       // hitbox.size = new Vector2(hitbox_size_original.x, hitbox_size_original.y * crouch_height_modifier);
         // when crouching, halve the height of hitbox, but don't change width
         // we also need to move this hitbox to the base of the capsule
 
-        hitbox.offset = new Vector2(hitbox_offset_original.x, -(hitbox_size_original.y - hitbox.size.y)/2);
+       // hitbox.offset = new Vector2(hitbox_offset_original.x, -(hitbox_size_original.y - hitbox.size.y)/2);
     }
 
     private void UnCrouch()
     {
         // no ceiling above us, safe to stand up
-        hitbox.size = hitbox_size_original;
-        hitbox.offset = hitbox_offset_original;
+
+        //  hitbox.size = hitbox_size_original;
+        // hitbox.offset = hitbox_offset_original;
+
         // go back to original hitbox size and offset
+
+        crouch_hitbox.enabled = false;
+        for (int i = 0; i < 2; i++)
+        {
+                hitboxes[i].enabled = true;
+        }
+
         crouch = false;
         try_uncrouch = false;
     }
