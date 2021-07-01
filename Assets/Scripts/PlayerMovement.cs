@@ -187,23 +187,11 @@ public class PlayerMovement : MonoBehaviour
         {
             hitboxes[i].enabled = false; // disable each collider
         }
-
-       // hitbox.size = new Vector2(hitbox_size_original.x, hitbox_size_original.y * crouch_height_modifier);
-        // when crouching, halve the height of hitbox, but don't change width
-        // we also need to move this hitbox to the base of the capsule
-
-       // hitbox.offset = new Vector2(hitbox_offset_original.x, -(hitbox_size_original.y - hitbox.size.y)/2);
     }
 
     private void UnCrouch()
     {
         // no ceiling above us, safe to stand up
-
-        //  hitbox.size = hitbox_size_original;
-        // hitbox.offset = hitbox_offset_original;
-
-        // go back to original hitbox size and offset
-
         crouch_hitbox.enabled = false;
         for (int i = 0; i < 2; i++)
         {
