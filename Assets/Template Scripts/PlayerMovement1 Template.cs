@@ -4,10 +4,9 @@ using UnityEngine;
 
 // TEMPLATE FOR FIRST VERSION -- START WITH THIS
 
-public class PlayerMovement1Template : MonoBehaviour
+public class PlayerMovement1Template : MonoBehaviour // Ensure name matches script file name
 {
-    public Rigidbody2D rb;
-    public CapsuleCollider2D hitbox;
+    private Rigidbody2D rb;
 
     [SerializeField] private float movespeed;
     [SerializeField] private float jumpspeed;
@@ -18,8 +17,8 @@ public class PlayerMovement1Template : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // We initialized 'rb' (Rigidbody2D object) and 'hitbox' (CapsuleCollider2D object).
-        // However, these objects aren't actually assigned to anything yet, they're basically empty!
+        // We initialized 'rb' (Rigidbody2D object).
+        // However, this object isn't actually assigned to anything yet, they're basically empty!
         // Assign these to the corresponding components of our character using GetComponent<>()
     }
 
@@ -30,7 +29,8 @@ public class PlayerMovement1Template : MonoBehaviour
         float x_component = Input.GetAxisRaw("Horizontal");
         // Input.GetAxisRaw() returns 1 if going right, -1 if going left
 
-        direction = new Vector2(x_component * movespeed, rb.velocity.y);
+        direction = new Vector2(/* What should the x-componnet be?*/, rb.velocity.y);
+
         // direction is a 2D vector that points to where we are moving
         // the y-component is not altered, we will only alter when we jump
 
@@ -38,7 +38,6 @@ public class PlayerMovement1Template : MonoBehaviour
            If they did, record that using our try_jump boolean variable.
          
            Hint: Look at Input.GetButtonDown in the Unity documentation
-
          */
     }
 

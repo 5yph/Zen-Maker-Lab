@@ -5,8 +5,7 @@ using UnityEngine;
 // SOLUTIONS TO THE FIRST TEMPLATE (not actual source code)
 public class PlayerMovement1 : MonoBehaviour
 {
-    public Rigidbody2D rb;
-    public CapsuleCollider2D hitbox;
+    private Rigidbody2D rb;
 
     [SerializeField] private float movespeed;
     [SerializeField] private float jumpspeed;
@@ -17,7 +16,6 @@ public class PlayerMovement1 : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        hitbox = GetComponent<CapsuleCollider2D>();
         // get reference to components, allows us to use built-in functions
     }
 

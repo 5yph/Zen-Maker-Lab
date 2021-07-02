@@ -8,9 +8,13 @@ public class PlayerAnimator : MonoBehaviour
     PlayerProjectileTrigger shooter;
     Animator animator;
     Rigidbody2D rb;
-    SpriteRenderer sprite;
+    Damage damage;
+    [SerializeField] AnimationClip death_animation;
+    [SerializeField] AnimationClip respawn_animation;
 
     public bool facing_right = true; // Sprite by default is facing right
+    [HideInInspector] public float death_time; // How long it takes to die (by animation standards)
+    [HideInInspector] public float respawn_time; // How long it takes to respawn (by animation standards)
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +23,10 @@ public class PlayerAnimator : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         player = GetComponent<PlayerMovement>();
         shooter = GetComponent<PlayerProjectileTrigger>();
-        sprite = GetComponent<SpriteRenderer>();
+        damage = GetComponent<Damage>();
+
+        death_time = death_animation.length / animator.GetFloat("DeathMultiplier");
+        respawn_time = respawn_animation.length / animator.GetFloat("RespawnMultiplier");
     }
 
     // Update is called once per frame
@@ -27,15 +34,15 @@ public class PlayerAnimator : MonoBehaviour
     {
         // flip character if move direction is opposite to before
         float direction = Input.GetAxisRaw("Horizontal");
-        if (direction > 0 && !facing_right)
+        if (direction > 0 && !facing_right && !damage.dead && !damage.respawning) // don't flip if we are dead
         {
             Flip();
-        } else if (direction < 0 && facing_right)
+        } else if (direction < 0 && facing_right && !damage.dead && !damage.respawning)
         {
             Flip();
         }
 
-        if (player.direction.magnitude < 0.1)
+        if (player.direction.magnitude < 1)
         {
             // not moving
             animator.SetBool("Moving", false);
@@ -44,12 +51,12 @@ public class PlayerAnimator : MonoBehaviour
             animator.SetBool("Moving", true);
         }
 
-        if (rb.velocity.y > 0.1)
+        if (rb.velocity.y > 5) // You may need to adjust these values to suit you best
         {
             // player is shooting up into the air
             animator.SetBool("Falling", false);
             animator.SetBool("Jumping", true);
-        } else if (rb.velocity.y < -0.1)
+        } else if (rb.velocity.y < -5)
         {
             // player is falling
             animator.SetBool("Jumping", false);
@@ -64,13 +71,17 @@ public class PlayerAnimator : MonoBehaviour
         {
             // player is crouching 
             animator.SetBool("Crouching", true);
+        } else
+        {
+            animator.SetBool("Crouching", false);
         }
 
+        /*
         if (player.try_uncrouch && !player.ceiling_check)
         {
             // if player can successfully uncrouch
             animator.SetBool("Crouching", false);
-        }
+        } */
 
         if (shooter.shooting)
         {
@@ -79,6 +90,22 @@ public class PlayerAnimator : MonoBehaviour
         } else
         {
             animator.SetBool("Shooting", false);
+        }
+
+        if (damage.dead)
+        {
+            animator.SetBool("Dead", true); // Ensure this matches your animation name!
+        } else
+        {
+            animator.SetBool("Dead", false);
+        }
+
+        if (damage.respawning)
+        {
+            animator.SetBool("Respawning", true);
+        } else
+        {
+            animator.SetBool("Respawning", false);
         }
 
     }

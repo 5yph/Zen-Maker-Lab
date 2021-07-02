@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -34,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Vector2 ceiling_check_offset; // where should our circle detecting ground be located?
     [SerializeField] private float ceiling_check_radius = 0.25f; // how big should our ground check circle be
 
-    public Vector2 direction; // movement direction
+    [HideInInspector] public Vector2 direction; // movement direction
 
     private int jump_count = 2; // how many times can we jump
     private bool grounded = false; // is the character touching ground?
