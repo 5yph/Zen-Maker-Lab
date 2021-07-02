@@ -29,7 +29,7 @@ public class PlayerMovement1Template : MonoBehaviour // Ensure name matches scri
         float x_component = Input.GetAxisRaw("Horizontal");
         // Input.GetAxisRaw() returns 1 if going right, -1 if going left
 
-        direction = new Vector2(/* What should the x-componnet be?*/, rb.velocity.y);
+        direction = new Vector2(/* What should the x-component be?*/, rb.velocity.y);
 
         // direction is a 2D vector that points to where we are moving
         // the y-component is not altered, we will only alter when we jump
