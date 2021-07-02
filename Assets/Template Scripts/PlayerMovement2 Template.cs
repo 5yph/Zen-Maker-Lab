@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerMovement2Template : MonoBehaviour
 {
     public Rigidbody2D rb;
-    public CapsuleCollider2D hitbox;
     public LayerMask groundLayer; // which layer should we consider ground (for jumping)
 
     [Header("Speeds")]
@@ -29,8 +28,6 @@ public class PlayerMovement2Template : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        hitbox = GetComponent<CapsuleCollider2D>();
-        // get reference to components, allows us to use built-in functions
     }
 
     void Update()

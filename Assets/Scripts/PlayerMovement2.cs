@@ -7,7 +7,6 @@ using UnityEngine;
 public class PlayerMovement2 : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private CapsuleCollider2D hitbox;
     public LayerMask groundLayer;
 
     [Header("Speeds")]
@@ -30,8 +29,6 @@ public class PlayerMovement2 : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        hitbox = GetComponent<CapsuleCollider2D>();
-        // get reference to components, allows us to use built-in functions
     }
 
     void Update()
