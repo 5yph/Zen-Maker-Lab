@@ -37,7 +37,10 @@ public class PlayerMovement2Template : MonoBehaviour
 
         direction = new Vector2(x_component * movespeed, rb.velocity.y);
         
-        // Implement code here to check if our player is grounded here, set our 'grounded' variable appropriately
+        // TASK #1
+
+        // IMPLEMENT code here to check if our player is grounded here, set our 'grounded' variable appropriately
+        // Jumps should be reset upon touching ground
 
         if (Input.GetButtonDown("Jump"))
         {
@@ -45,12 +48,16 @@ public class PlayerMovement2Template : MonoBehaviour
 
             if (grounded)
             {
+                // TASK #2
+
                 /* If our character is grounded and we pressed jump, we need to
                  execute the jump function. We should also modify the jump_count variable here
                  to keep track of how many jumps we have left. Implement this code.*/
             } 
             else if (!grounded && (jump_count == 2))
             {
+                // TASK #3
+
                 /* This conditional says that we are not on the ground yet we still have 2 jumps left.
                 This must mean that we fell off a cliff somewhere. In this situation where the user presses 
                 jump, we should allow them to jump, but only ONCE. Implement this code. */
@@ -58,6 +65,8 @@ public class PlayerMovement2Template : MonoBehaviour
             }
             else if (jump_count > 0)
             {
+                // TASK #4
+
                 // Here, the player is in the air but still has jumps. Implement this code.
             }
 
@@ -106,18 +115,18 @@ public class PlayerMovement2Template : MonoBehaviour
 
     private void JumpCancel()
     {
-        if (rb.velocity.y > short_jumpspeed)
-        {
-            /* In this section of code, the player cancelled the jump.
-             When the jump is cancelled, we want the character to have a smaller jump.
-             We do this by checking if the character's current velocity is bigger than
-             the short jumpspeed. If it is, we should correct it by setting the velocity
-             of our rigid body to a new vector that represents the correct jumpspeed. Implement this.
 
-             Hint: The x-component of the new vector shouldn't change, just the y-component.
-             */
+        // TASK #5
 
-        }
+        /* In this section of code, the player cancelled the jump.
+         When the jump is cancelled, we want the character to have a smaller jump.
+         We do this by checking if the character's current velocity is bigger than
+         the short jumpspeed. If it is, we should correct it by setting the velocity
+         of our rigid body to a new vector that represents the short jumpspeed. Implement this.
+
+         Hint: The x-component of the new vector shouldn't change, just the y-component.
+        */
+
         jump_cancelled = false;
     }
 

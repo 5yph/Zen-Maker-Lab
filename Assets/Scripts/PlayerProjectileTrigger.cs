@@ -12,7 +12,7 @@ public class PlayerProjectileTrigger : MonoBehaviour
     Damage damage;
     
     [SerializeField] private float cooldown; // fire rate of projectile, in seconds
-    private float next_time_can_fire; // when we can fire the next projectile
+    private float next_time_can_fire = 0; // when we can fire the next projectile
     [HideInInspector] public bool shooting = false; // are we shooting (for animator purposes)
 
     private void Start()

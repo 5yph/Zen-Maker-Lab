@@ -26,9 +26,6 @@ public class PlayerMovement : MonoBehaviour
     [Space]
 
     [Header("Crouch")]
-
-    [SerializeField] private float crouch_height_modifier; // a decimal value from 0.5-0.99 that tells you 
-    // what percentage of original height the crouched height will be. DO NOT SET LOWER THAN 0.5
     [SerializeField] private Vector2 ceiling_check_offset; // where should our circle detecting ground be located?
     [SerializeField] private float ceiling_check_radius = 0.25f; // how big should our ground check circle be
 

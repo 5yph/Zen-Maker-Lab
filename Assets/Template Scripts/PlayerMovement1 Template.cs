@@ -17,8 +17,10 @@ public class PlayerMovement1Template : MonoBehaviour // Ensure name matches scri
     // Start is called before the first frame update
     void Start()
     {
+        // TASK #1
+
         // We initialized 'rb' (Rigidbody2D object).
-        // However, this object isn't actually assigned to anything yet, they're basically empty!
+        // However, this object isn't actually assigned to anything yet, it's basically empty!
         // Assign these to the corresponding components of our character using GetComponent<>()
     }
 
@@ -29,21 +31,29 @@ public class PlayerMovement1Template : MonoBehaviour // Ensure name matches scri
         float x_component = Input.GetAxisRaw("Horizontal");
         // Input.GetAxisRaw() returns 1 if going right, -1 if going left
 
+        // TASK #2
+
         // UNCOMMENT BELOW
         // direction = new Vector2( What should the x-component be?, rb.velocity.y);
 
         // direction is a 2D vector that points to where we are moving
         // the y-component is not altered, we will only alter when we jump
+        // don't forget to take 'movespeed' into account.
+
+        // TASK #3
 
         /* Write a conditional statement that checks if the player pressed Jump.
-           If they did, record that using our try_jump boolean variable.
+           If they did, record that using our try_jump boolean variable, so we can remember
+           it in the next physics update.
          
-           Hint: Look at Input.GetButtonDown in the Unity documentation
+           Hint: Input.GetButtonDown("Jump") returns true if the player presses the jump key.
          */
     }
 
     private void FixedUpdate()
     {   // for physics updates
+
+        // TASK #4
 
         // Call the Move function here (don't forget the parameter)
 
@@ -52,8 +62,11 @@ public class PlayerMovement1Template : MonoBehaviour // Ensure name matches scri
 
     private void Move(Vector2 direction)
     {
+
+        // TASK #5
+
         // Adjust the velocity of our rigid body to match the new 'direction' velocity
-        // Hint: rb.velocity represents the velocity of our rigid body
+        // Hint: Look at Unity documentation to find out what determines the velocity of our rigidbody
     }
 
     private void Jump()
