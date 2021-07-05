@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// THIS IS THE TEMPLATE FOR THE FINAL VERSION OF THE PLAYER MOVEMENT SCRIPT
+// THIS IS THE TEMPLATE FOR THE THIRD VERSION OF THE PLAYER MOVEMENT SCRIPT
 // Do not attempt unless you have already completed the previous templates
-
-public class PlayerMovementTemplate : MonoBehaviour
+public class PlayerMovement3Template : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private CapsuleCollider2D[] hitboxes;
+    private CapsuleCollider2D[] hitboxes; 
 
-    private CircleCollider2D crouch_hitbox; // hitbox for when we crouch
+    private CircleCollider2D crouch_hitbox; // hitbox for when we crouch 
     public LayerMask groundLayer; // what is considered ground
     public LayerMask ceilingLayer; // what is considered ceiling
 
@@ -32,19 +31,16 @@ public class PlayerMovementTemplate : MonoBehaviour
     [SerializeField] private Vector2 ceiling_check_offset; // where should our circle detecting ground be located?
     [SerializeField] private float ceiling_check_radius = 0.25f; // how big should our ground check circle be
 
-    [HideInInspector] public Vector2 direction; // movement direction
+    [HideInInspector] public Vector2 direction; // movement direction 
 
     private int jump_count = 2; // how many times can we jump
     private bool grounded = false; // is the character touching ground?
     private bool try_jump = false; // is the player trying to jump?
     private bool jump_cancelled = false; // did player cancel jump?
 
-    [HideInInspector] public bool crouch = false; // is the player crouching
-
-    private bool try_uncrouch = false; // is the player trying to stand up
-    private bool ceiling_check = false; // is there a ceiling above us?
-
-    public bool facing_right = true; // is our player facing right? public so projectile script can access
+    [HideInInspector]  public bool crouch = false; // is the player crouching
+    [HideInInspector]  public bool try_uncrouch = false; // is the player trying to stand up
+    [HideInInspector]  public bool ceiling_check = false; // is there a ceiling above us?
 
     void Start()
     {
@@ -57,6 +53,7 @@ public class PlayerMovementTemplate : MonoBehaviour
 
     void Update()
     {   // detect input in Update() so we don't miss any inputs
+
         float x_component = Input.GetAxisRaw("Horizontal");
 
         if (!crouch)
@@ -66,11 +63,18 @@ public class PlayerMovementTemplate : MonoBehaviour
         }
         else
         {
-            direction = new Vector2(x_component * crouchspeed, rb.velocity.y);
+            // TASK #1
+
+            /* IMPLEMENT a new way to deal with movement speed while crouched.
+        Before we had a constant movespeed. Now, after checking that the player is crouched,
+        our new movespeed should be the crouchspeed instead. 
+        */ 
         }
 
         grounded = IsGrounded();
-        ceiling_check = UnderCeiling();
+        
+        // TASK #2
+        // ADD A CEILING CHECK, just like the ground check, with the UnderCeiling() function
 
         if (grounded)
         {
@@ -106,24 +110,22 @@ public class PlayerMovementTemplate : MonoBehaviour
             jump_cancelled = true;
         }
 
-        if (Input.GetKey(KeyCode.S) && grounded) // replace with key of choice
-        {
-            // user presses crouch
-            crouch = true;
-            try_uncrouch = false;
-        }
+            // TASK #3
+            // We need to check if the user is pressing crouch, look into Input.GetKey() in documentation
+            // Check if the user is pressing the "crouch" key (can be any key you wish).
 
-        if ((Input.GetKeyUp(KeyCode.S) || !grounded) && crouch)
-        {
-            // user stops crouching if stops holding crouch or not on ground anymore
-            try_uncrouch = true;
-        }
+            // If user presses crouch and he is grounded, we should change the values of vars 'crouch' and 'try_uncrouch'.
+            // Implement this. ('crouch' calls the Crouch() function, 'try_uncrouch' calls UnCrouch() if no ceiling).
 
-        // LAST TASK
 
-        // We need to call Flip() when our player decides to turn around
-        // It is up to you to figure out how to do this.
-        // Hint: look for 'x_component' and the boolean 'facing_right'
+            // TASK #4
+            // Create an if statement that allows us to try to uncrouch given the correct conditions
+            // This should only happen if the user is already crouched
+            
+            // We try to uncrouch if: We release crouch OR we are no longer grounded.
+
+            // When we try to uncrouch, the variable 'try_uncrouch' should change.
+            // We do not modify crouch because maybe we aren't able to uncrouch yet (under ceiling)
 
     }
     private void FixedUpdate()
@@ -147,12 +149,13 @@ public class PlayerMovementTemplate : MonoBehaviour
 
         if (try_uncrouch)
         {
-            if (!ceiling_check)
-            {
-                UnCrouch();
-                // if there is a ceiling, we keep trying to uncrouch until
-                // we find there isn't a ceiling -- unless the user presses crouch again
-            }
+            // TASK #5
+
+            /* Before we can allow our character to uncrouch, we need to make sure that
+            there is no overhead ceiling, otherwise we could get stuck.
+
+            IMPLEMENT this. Remember UnCrouch() and ceiling_check.
+            */
         }
     }
 
@@ -169,7 +172,6 @@ public class PlayerMovementTemplate : MonoBehaviour
     private void Move(Vector2 direction)
     {
         rb.velocity = direction;
-        // Create a velocity in a specific direction
     }
 
     private void Jump()
@@ -206,20 +208,8 @@ public class PlayerMovementTemplate : MonoBehaviour
         {
             hitboxes[i].enabled = true;
         }
-
         crouch = false;
         try_uncrouch = false;
-    }
-
-    void Flip()
-    {
-        // Flip the parent object and all attached child objects
-
-        Vector3 newScale = transform.localScale;
-        newScale.x = newScale.x * -1;
-        transform.localScale = newScale;
-
-        facing_right = !facing_right;
     }
 
     private void OnDrawGizmos()
