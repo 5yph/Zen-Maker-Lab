@@ -38,8 +38,6 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.gameObject.layer);
-
         if (collision.gameObject.layer == ground_layer_number)
         {
             // if the collided object's layer is ground
