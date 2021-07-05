@@ -7,7 +7,7 @@ public class PlayerProjectileTrigger : MonoBehaviour
     public GameObject projectile; // what projectile is this object shooting
     public Transform spawn; // where projectiles spawn (should be child object)
 
-    PlayerAnimator animator;
+    PlayerMovement player;
     Projectile projectile_settings;
     Damage damage;
     
@@ -17,7 +17,7 @@ public class PlayerProjectileTrigger : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponent<PlayerAnimator>();
+        player = GetComponent<PlayerMovement>();
         projectile_settings = projectile.GetComponent<Projectile>();
         damage = GetComponent<Damage>();
     }
@@ -31,11 +31,11 @@ public class PlayerProjectileTrigger : MonoBehaviour
             // Since the projectile spawn point is flips with the player, we just 
             // need to change the direction of the resultant projectile
 
-            if (animator.facing_right && projectile_settings.velocity.x < 0)
+            if (player.facing_right && projectile_settings.velocity.x < 0)
             {
                 // if we are facing right but projectile velocity points left
                 projectile_settings.velocity.x *= -1;
-            } else if (!animator.facing_right && projectile_settings.velocity.x > 0)
+            } else if (!player.facing_right && projectile_settings.velocity.x > 0)
             {
                 // if we are facing left but projectile velocity points right
                 projectile_settings.velocity.x *= -1;
@@ -44,7 +44,7 @@ public class PlayerProjectileTrigger : MonoBehaviour
             shooting = true;
             if (next_time_can_fire <= Time.time)
             {
-                Instantiate(projectile, spawn.position, spawn.rotation);
+                Instantiate(projectile, spawn.position, projectile.transform.rotation);
                 next_time_can_fire = Time.time + cooldown; // next time we can fire is current time + cooldown
             }
 

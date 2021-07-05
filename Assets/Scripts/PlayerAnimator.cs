@@ -33,14 +33,6 @@ public class PlayerAnimator : MonoBehaviour
     void Update()
     {
         // flip character if move direction is opposite to before
-        float direction = Input.GetAxisRaw("Horizontal");
-        if (direction > 0 && !facing_right && !damage.dead && !damage.respawning) // don't flip if we are dead
-        {
-            Flip();
-        } else if (direction < 0 && facing_right && !damage.dead && !damage.respawning)
-        {
-            Flip();
-        }
 
         if (player.direction.magnitude < 1)
         {
@@ -76,13 +68,6 @@ public class PlayerAnimator : MonoBehaviour
             animator.SetBool("Crouching", false);
         }
 
-        /*
-        if (player.try_uncrouch && !player.ceiling_check)
-        {
-            // if player can successfully uncrouch
-            animator.SetBool("Crouching", false);
-        } */
-
         if (shooter.shooting)
         {
             // if player is shooting
@@ -108,16 +93,5 @@ public class PlayerAnimator : MonoBehaviour
             animator.SetBool("Respawning", false);
         }
 
-    }
-
-    void Flip()
-    {
-        // Flip the parent object and all attached child objects
-
-        Vector3 newScale = transform.localScale;
-        newScale.x = newScale.x * -1;
-        transform.localScale = newScale;
-
-        facing_right = !facing_right;
     }
 }

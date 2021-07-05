@@ -37,8 +37,11 @@ public class PlayerMovement : MonoBehaviour
     private bool jump_cancelled = false; // did player cancel jump?
 
     [HideInInspector] public bool crouch = false; // is the player crouching
-    [HideInInspector] public bool try_uncrouch = false; // is the player trying to stand up
-    [HideInInspector] public bool ceiling_check = false; // is there a ceiling above us?
+    
+    private bool try_uncrouch = false; // is the player trying to stand up
+    private bool ceiling_check = false; // is there a ceiling above us?
+
+    public bool facing_right = true; // is our player facing right? public so projectile script can access
 
     void Start()
     {
@@ -110,6 +113,15 @@ public class PlayerMovement : MonoBehaviour
             try_uncrouch = true;
         }
 
+        if (x_component > 0 && !facing_right) // don't flip if we are dead
+        {
+            Flip();
+        }
+        else if (x_component < 0 && facing_right)
+        {
+            Flip();
+        }
+
     }
     private void FixedUpdate()
     {
@@ -175,7 +187,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Crouch()
     {
-
         crouch_hitbox.enabled = true;
 
         for (int i = 0; i < hitboxes.Length; i++)
@@ -195,6 +206,17 @@ public class PlayerMovement : MonoBehaviour
 
         crouch = false;
         try_uncrouch = false;
+    }
+
+    void Flip()
+    {
+        // Flip the parent object and all attached child objects
+
+        Vector3 newScale = transform.localScale;
+        newScale.x = newScale.x * -1;
+        transform.localScale = newScale;
+
+        facing_right = !facing_right;
     }
 
     private void OnDrawGizmos()
