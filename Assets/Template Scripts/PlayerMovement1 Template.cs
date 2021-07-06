@@ -30,6 +30,7 @@ public class PlayerMovement1Template : MonoBehaviour // Ensure name matches scri
 
         float x_component = Input.GetAxisRaw("Horizontal");
         // Input.GetAxisRaw() returns 1 if going right, -1 if going left
+        // returns 0 if no input is detected
 
         // TASK #2
 
