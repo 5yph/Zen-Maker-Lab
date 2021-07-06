@@ -32,8 +32,6 @@ public class PlayerAnimator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // flip character if move direction is opposite to before
-
         if (player.direction.magnitude < 1)
         {
             // not moving
@@ -48,7 +46,7 @@ public class PlayerAnimator : MonoBehaviour
             // player is shooting up into the air
             animator.SetBool("Falling", false);
             animator.SetBool("Jumping", true);
-        } else if (rb.velocity.y < -5)
+        } else if (rb.velocity.y < -20)
         {
             // player is falling
             animator.SetBool("Jumping", false);
