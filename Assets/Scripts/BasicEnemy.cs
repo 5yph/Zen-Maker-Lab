@@ -8,6 +8,7 @@ public class BasicEnemy : MonoBehaviour
 
     [SerializeField] private float movespeed = 5f;
     [SerializeField] private bool moves_right = false; // does the enemy move right? (default is left)
+    [SerializeField] private bool facing_right = false; // is the enemy facing right?
     [SerializeField] private bool invincible = false; // can enemy die by player?
     private float speed; // used to check if enemy is moving
 
@@ -22,10 +23,20 @@ public class BasicEnemy : MonoBehaviour
     void Update()
     {
 
+        if (moves_right && !facing_right)
+        {
+            // if enemy is moving right but he is facing left
+            Flip();
+        } else if (!moves_right && facing_right)
+        {
+            // if enemy is moving left but he is facing right
+            Flip();
+        }
+
         speed = enemy.velocity.magnitude;
         if (speed < 0.1)
         {
-            // check if our enemy not moving, flip direction
+            // check if enemy not moving, flip direction
             // don't put speed at 0 as sometimes it may not register
             moves_right = !moves_right;
             // if we were moving right, we now move left. If we were moving left, we now move right
@@ -76,5 +87,16 @@ public class BasicEnemy : MonoBehaviour
         {
             enemy.velocity = new Vector2(-movespeed, enemy.velocity.y);
         }
+    }
+
+    void Flip()
+    {
+        // Flip the parent object and all attached child objects
+
+        Vector3 newScale = transform.localScale;
+        newScale.x = newScale.x * -1;
+        transform.localScale = newScale;
+
+        facing_right = !facing_right;
     }
 }

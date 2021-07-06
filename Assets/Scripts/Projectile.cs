@@ -7,10 +7,8 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float lifespan = 3f; // how long the projectile is alive (in seconds)
     [SerializeField] private bool gravity = false; // projectile uses gravity
     [SerializeField] private bool turn_off_ray = false;
-    [SerializeField] private int ground_layer_number; // what layer number is the ground
 
     public Vector2 velocity; // 2D vector representing direction of projectile 
-    public LayerMask penetrable; // What layer can the projectile penetrate, if any?
 
     private Rigidbody2D projectile;
 
@@ -38,7 +36,7 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == ground_layer_number)
+        if (collision.gameObject.tag == "Ground")
         {
             // if the collided object's layer is ground
             Destroy(gameObject); // destroy projectile if it hits this obstacle
