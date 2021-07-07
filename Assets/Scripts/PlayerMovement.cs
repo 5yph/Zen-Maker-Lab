@@ -42,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
     private bool ceiling_check = false; // is there a ceiling above us?
 
     public bool facing_right = true; // is our player facing right? public so projectile script can access
+    public bool allow_flip = true; // turn false is player is dead
 
     void Start()
     {
@@ -115,11 +116,17 @@ public class PlayerMovement : MonoBehaviour
 
         if (x_component > 0 && !facing_right) // don't flip if we are dead
         {
-            Flip();
+            if (allow_flip)
+            {
+                Flip();
+            }
         }
         else if (x_component < 0 && facing_right)
         {
-            Flip();
+            if (allow_flip)
+            {
+                Flip();
+            }
         }
 
     }

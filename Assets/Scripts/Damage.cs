@@ -8,6 +8,7 @@ public class Damage : MonoBehaviour
 
     public Transform Spawn; // where we respawn
     private Rigidbody2D rb;
+    private PlayerMovement player;
 
     [HideInInspector] public bool dead = false; // are we dead?
     [HideInInspector] public bool respawning = false; // are we respawning?
@@ -18,6 +19,7 @@ public class Damage : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         // get the death time from the animation script
+        player = GetComponent<PlayerMovement>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -45,7 +47,8 @@ public class Damage : MonoBehaviour
     {
         dead = true;
         // gets the length of time that our death animation will play
-
+        player.allow_flip = false;
+        
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         // Freeze all movement of player when we die
 
@@ -70,6 +73,7 @@ public class Damage : MonoBehaviour
         respawning = false;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         // Go back to default constraints (freezing rotation).
+        player.allow_flip = true;
         rb.velocity = Vector2.down; // add some gravity so it doesn't freeze in air
     }
 

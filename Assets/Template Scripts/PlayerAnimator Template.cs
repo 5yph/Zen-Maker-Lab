@@ -44,12 +44,12 @@ public class PlayerAnimatorTemplate : MonoBehaviour
 
         // TASK #1
 
-        /* Use the Rigidbody2D (rb) component to do the following.
-           Hint: rb.velocity.y gives you info about the velocity in the y direction.
+        /* Use the Rigidbody2D (rb) component to do the following:
            
            Check if our player is jumping (or is just getting launched into the air).
            Check if the player is falling.
            Check if neither is the case.
+           (Hint: rb.velocity.y gives you info about the velocity in the y direction)
         
            We want to keep track of two booleans: "Jumping" and "Falling", 
            in the same manner as the above if-else statement. It is up to you to figure
