@@ -104,14 +104,12 @@ public class WalljumpMove : MonoBehaviour
             // user presses jump
             if (walljump.collider != null)
             {
-                if (walljump.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                if (walljump_count > 0)
                 {
-                    if (walljump_count > 0)
-                    {
-                        try_jump = true;
-                        walljump_count = 0;
-                    }
+                    try_jump = true;
+                    walljump_count = 0;
                 }
+
             }
 
             if (grounded)
