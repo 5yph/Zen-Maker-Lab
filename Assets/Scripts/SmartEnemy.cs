@@ -5,12 +5,14 @@ using UnityEngine;
 public class SmartEnemy : MonoBehaviour
 {
     [SerializeField] private float movespeed = 3f;
-    [SerializeField] private bool moves_right = false; 
+    [SerializeField] private bool moves_right = false;
+    [SerializeField] private bool facing_right = false; // is the enemy facing right
     [SerializeField] private bool invincible = false;
     [SerializeField] private float offset = 3f; // where the raycast originates
     [SerializeField] private float distance = 2f; // how far down the raycast points
-   
+
     private float speed; // used to check if enemy is moving
+
 
     private RaycastHit2D hit; // what we hit with our raycast
     private Vector2 offset_vec; // vector representing where our offset is
@@ -56,7 +58,14 @@ public class SmartEnemy : MonoBehaviour
             // our raycast is not hitting ground (due to layermask)
             moves_right = !moves_right; // change direction
         }
-        
+
+        if (facing_right && !moves_right)
+        {
+            Flip();
+        } else if (!facing_right && moves_right)
+        {
+            Flip();
+        }
     }
     void FixedUpdate()
     {
@@ -96,7 +105,16 @@ public class SmartEnemy : MonoBehaviour
         {
             enemy.velocity = new Vector2(-movespeed, enemy.velocity.y);
         }
+    }
+    void Flip()
+    {
+        // Flip the parent object and all attached child objects
 
+        Vector3 newScale = transform.localScale;
+        newScale.x = newScale.x * -1;
+        transform.localScale = newScale;
+
+        facing_right = !facing_right;
     }
 
     private void OnDrawGizmos()
