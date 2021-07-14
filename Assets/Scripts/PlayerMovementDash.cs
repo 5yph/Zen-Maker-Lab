@@ -280,9 +280,16 @@ public class PlayerMovementDash : MonoBehaviour
         if (is_dashing_up)
         {
             // player is dashing upwards
-            // Debug.Log("Dashing up");
-            direction.y = short_jumpspeed * jump_dash_multiplier;
-            rb.velocity = direction;
+            if (!ceiling_check)
+            {
+                // can't be under ceiling, otherwise will stick to roof
+                direction.y = short_jumpspeed * jump_dash_multiplier;
+                rb.velocity = direction;
+            } else
+            {
+                // stop dash immediately if we hit ceiling
+                is_dashing_up = false;
+            }
         } else if (Mathf.Abs(direction.x) < movespeed)
         {
             // if player is not moving horizontally and just dashes
