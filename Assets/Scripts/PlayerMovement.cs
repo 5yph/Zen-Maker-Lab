@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     private bool ceiling_check = false; // is there a ceiling above us?
 
     public bool facing_right = true; // is our player facing right? public so projectile script can access
-    public bool allow_flip = true; // turn false is player is dead
+    [HideInInspector] public bool allow_flip = true; // turn false is player is dead
 
     void Start()
     {
