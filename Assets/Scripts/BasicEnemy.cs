@@ -34,17 +34,6 @@ public class BasicEnemy : MonoBehaviour
             Flip();
         }
 
-        /*
-        if (moves_right && !facing_right)
-        {
-            // if enemy is moving right but he is facing left
-            Flip();
-        } else if (!moves_right && facing_right)
-        {
-            // if enemy is moving left but he is facing right
-            Flip();
-        } */
-
         if (facing_right)
         {
             ray_dir = new Vector2(1, 0);
@@ -55,18 +44,6 @@ public class BasicEnemy : MonoBehaviour
             ray_dir = new Vector2(-1, 0);
             moves_right = false;
         }
-
-        /*
-        speed = enemy.velocity.magnitude;
-
-        if (speed < 0.1)
-        {
-            // check if enemy not moving, flip direction
-            // don't put speed at 0 as sometimes it may not register
-            moves_right = !moves_right;
-            // if we were moving right, we now move left. If we were moving left, we now move right
-            Move();
-        } */
     }
 
     void FixedUpdate()
