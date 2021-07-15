@@ -42,7 +42,7 @@ public class PlayerMovementDash : MonoBehaviour
     [HideInInspector] public Vector2 direction; // movement direction
 
     private int jump_count = 2; // how many times can we jump
-    private bool grounded = false; // is the character touching ground?
+    [HideInInspector] public bool grounded = false; // is the character touching ground?
     private bool try_jump = false; // is the player trying to jump?
     private bool jump_cancelled = false; // did player cancel jump?
 
@@ -50,7 +50,7 @@ public class PlayerMovementDash : MonoBehaviour
     [HideInInspector] public bool is_dashing = false; // is the player dashing
     [HideInInspector] public bool is_dashing_up = false; // is the player dashing upwards
 
-    private bool normal_dash_cooldown = false; // is our regular dash on cooldown
+    [HideInInspector] public bool normal_dash_cooldown = false; // is our regular dash on cooldown
     private bool air_dash_cooldown = false; // is our air dash cooling down
     
     private bool try_uncrouch = false; // is the player trying to stand up
