@@ -280,6 +280,7 @@ public class PlayerMovementDash : MonoBehaviour
 
     private void Dash(Vector2 direction)
     {
+        allow_flip = false;
 
         if (is_dashing_up)
         {
@@ -325,6 +326,7 @@ public class PlayerMovementDash : MonoBehaviour
         yield return new WaitForSeconds(dash_time);
         is_dashing = false;
         is_dashing_up = false;
+        allow_flip = true;
         yield return new WaitForSeconds(dash_cooldown);
         normal_dash_cooldown = false;
     }
