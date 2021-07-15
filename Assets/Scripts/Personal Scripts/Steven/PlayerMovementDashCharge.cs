@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerMovementDash : MonoBehaviour
+public class PlayerMovementDashCharge : MonoBehaviour
 {
     private Rigidbody2D rb;
     private CapsuleCollider2D[] hitboxes;
@@ -49,9 +49,9 @@ public class PlayerMovementDash : MonoBehaviour
     [HideInInspector] public bool is_dashing = false; // is the player dashing
     [HideInInspector] public bool is_dashing_up = false; // is the player dashing upwards
 
+    private bool charging = false; // is our player charging their dash
     private bool normal_dash_cooldown = false; // is our regular dash on cooldown
-    private bool air_dash_cooldown = false; // is our air dash cooling down
-    
+
     private bool try_uncrouch = false; // is the player trying to stand up
     private bool ceiling_check = false; // is there a ceiling above us?
 
@@ -89,7 +89,9 @@ public class PlayerMovementDash : MonoBehaviour
         if (grounded)
         {
             jump_count = 2;
-            air_dash_cooldown = false; // can re-dash up
+        } else
+        {
+            charging = false;
         }
 
         if (Input.GetButtonDown("Jump"))
@@ -134,17 +136,8 @@ public class PlayerMovementDash : MonoBehaviour
             try_uncrouch = true;
         }
 
-        if ((Input.GetKeyDown(KeyCode.LeftShift)) && Input.GetButton("Jump") && !is_dashing && !is_dashing_up && !crouch)
+        if ((Input.GetKey(KeyCode.LeftShift)) && !is_dashing && !crouch)
         {
-            // if we press dash while holding jump (dash upwards)
-            if (!air_dash_cooldown)
-            {
-                is_dashing_up = true;
-                air_dash_cooldown = true;
-                StartCoroutine("DashWait");
-            }
-        } else if ((Input.GetKeyDown(KeyCode.LeftShift)) && !is_dashing && !crouch)
-        {            
             // if we press dash button
             if (grounded)
             {
@@ -152,20 +145,26 @@ public class PlayerMovementDash : MonoBehaviour
                 if (!normal_dash_cooldown)
                 {
                     // normal dash not on cooldown
-                    is_dashing = true;
-                    normal_dash_cooldown = true;
-
-                    StartCoroutine("DashWait");
+                    charging = true;
                 }
-            } else if (!air_dash_cooldown)
-            {
-                // if we are in the air but can still dash in the air
-                is_dashing = true;
-                air_dash_cooldown = true;
-
-                StartCoroutine("DashWait");
             }
-            
+        } 
+        
+        if (charging && Input.GetButtonDown("Jump")) {
+            // if we release the dash and the user tries to jump
+            Debug.Log("Dashing up");
+            charging = false;
+            normal_dash_cooldown = true;
+            is_dashing_up = true;
+            StartCoroutine("DashWait");
+        } 
+        else if (charging && Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            // if we release the dash button while we are charging...
+            charging = false;
+            normal_dash_cooldown = true;
+            is_dashing = true;
+            StartCoroutine("DashWait");
         }
 
         if (x_component > 0 && !facing_right) // don't flip if we are dead
@@ -280,6 +279,8 @@ public class PlayerMovementDash : MonoBehaviour
     private void Dash(Vector2 direction)
     {
 
+        allow_flip = false;
+
         if (is_dashing_up)
         {
             // player is dashing upwards
@@ -288,12 +289,14 @@ public class PlayerMovementDash : MonoBehaviour
                 // can't be under ceiling, otherwise will stick to roof
                 direction.y = short_jumpspeed * jump_dash_multiplier;
                 rb.velocity = direction;
-            } else
+            }
+            else
             {
                 // stop dash immediately if we hit ceiling
                 is_dashing_up = false;
             }
-        } else if (Mathf.Abs(direction.x) < movespeed)
+        }
+        else if (Mathf.Abs(direction.x) < movespeed)
         {
             // if player is not moving horizontally and just dashes
             if (facing_right)
@@ -304,14 +307,15 @@ public class PlayerMovementDash : MonoBehaviour
             {
                 rb.velocity = new Vector2(-movespeed * dash_multiplier, rb.velocity.y);
             }
-        } else
+        }
+        else
         {
+
             // player is dashing horizontally or diagonally
             if (facing_right)
             {
                 direction.x = movespeed * dash_multiplier;
-            }
-            else
+            } else
             {
                 direction.x = -1 * movespeed * dash_multiplier;
             }
@@ -324,6 +328,7 @@ public class PlayerMovementDash : MonoBehaviour
         yield return new WaitForSeconds(dash_time);
         is_dashing = false;
         is_dashing_up = false;
+        allow_flip = true; // DISABLE FLIPPING WHEN MOVING
         yield return new WaitForSeconds(dash_cooldown);
         normal_dash_cooldown = false;
     }
