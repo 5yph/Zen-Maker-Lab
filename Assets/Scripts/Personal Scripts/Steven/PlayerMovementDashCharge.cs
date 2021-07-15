@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+// RENAME THIS CLASS AND SCRIPT TO 'PLAYERMOVEMENT'
 public class PlayerMovementDashCharge : MonoBehaviour
 {
     private Rigidbody2D rb;
