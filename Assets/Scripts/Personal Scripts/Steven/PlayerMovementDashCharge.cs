@@ -152,7 +152,6 @@ public class PlayerMovementDashCharge : MonoBehaviour
         
         if (charging && Input.GetButtonDown("Jump")) {
             // if we release the dash and the user tries to jump
-            Debug.Log("Dashing up");
             charging = false;
             normal_dash_cooldown = true;
             is_dashing_up = true;
