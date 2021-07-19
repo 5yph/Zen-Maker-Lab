@@ -74,7 +74,7 @@ public class PlayerMovement3Template : MonoBehaviour
         grounded = IsGrounded();
         
         // TASK #2
-        // ADD A CEILING CHECK, just like the ground check, with the UnderCeiling() function
+        // ADD A CEILING CHECK, just like the ground check, with the UnderCeiling() function...
 
         if (grounded)
         {
@@ -110,23 +110,27 @@ public class PlayerMovement3Template : MonoBehaviour
             jump_cancelled = true;
         }
 
-            // TASK #3
-            // We need to check if the user is pressing crouch, look into Input.GetKey() in documentation
-            // Check if the user is pressing the "crouch" key (can be any key you wish).
+        // TASK #3 
 
-            // If user presses crouch and he is grounded, we should change the values of vars 'crouch' and 'try_uncrouch'.
-            // Implement this. ('crouch' calls the Crouch() function, 'try_uncrouch' calls UnCrouch() if no ceiling).
+        // We need to check if the user is pressing crouch, look into Input.GetKey() in documentation
+        // Check if the user is pressing the "crouch" key (can be any key you wish).
+        // We can pass 'KeyCode.S' in function Input.GetKey() to return true when our player presses S.
+
+        // If user presses crouch and he is grounded, we should change the values of vars 'crouch' and 'try_uncrouch'.
+        // Implement this. ('crouch' calls the Crouch() function, 'try_uncrouch' calls UnCrouch() if no ceiling).
 
 
-            // TASK #4
-            // Create an if statement that allows us to try to uncrouch given the correct conditions
-            // This should only happen if the user is already crouched
-            
-            // We try to uncrouch if: We release crouch OR we are no longer grounded.
+        // TASK #4
 
-            // When we try to uncrouch, the variable 'try_uncrouch' should change.
-            // We do not modify crouch because maybe we aren't able to uncrouch yet (under ceiling)
+        // Create an if statement that allows us to try to uncrouch given the correct conditions
+        // This should only happen if the user is already crouched
 
+        // We try to uncrouch if: We release crouch OR we are no longer grounded.
+        // Input.GetKeyUp() returns true if the key passed into its argument is released
+
+        // When we try to uncrouch, the variable 'try_uncrouch' should change.
+        // We do not modify crouch because maybe we aren't able to uncrouch yet (under ceiling)
+        
     }
     private void FixedUpdate()
     {
