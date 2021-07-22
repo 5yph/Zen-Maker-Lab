@@ -221,7 +221,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 newScale = transform.localScale;
         newScale.x = newScale.x * -1;
-        transform.localScale = newScale;
+        transform.localScale = newScale; 
 
         facing_right = !facing_right;
     }
